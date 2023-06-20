@@ -1,15 +1,15 @@
 version: 2.1
-
 jobs:
   build:
     docker:
-      - image: node:slim
+      # CircleCI PostgreSQL images available at: https://circleci.com/developer/images/image/cimg/postgres
+      - image: cimg/postgres:14.0
+        environment:
+          POSTGRES_USER: circleci-demo-go
+          POSTGRES_DB: circle_test
+
     steps:
-      - checkout
-      - run: echo "Hello World!"
-      
-workflows:
-  test_workflow:
-    jobs:
-      - build
-      
+      #  Wait for Postgres to be ready before proceeding
+      - run:
+          name: Waiting for Postgres to be ready
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m

@@ -43,11 +43,14 @@ jobs:
         MYSQL_DB: circleci_test
         MYSQL_PASSWORD: circleci_test
     steps:
-    - checkout
-    - run: apt-get update && apt-get install wget
-    - install-sudo
-    - setup-timezone
-    - install-dockerize
+      - run: apt-get update && apt-get install wget
+      - install-sudo
+      - setup-timezone
+      - install-dockerize
+      - setup_remote_docker:
+          docker_layer_caching: false
+      - install-mysql
+      - checkout
     - run:
         name: Waiting for Postgres to be ready
         command: dockerize -wait tcp://localhost:3306 -timeout 1m
@@ -69,13 +72,12 @@ jobs:
         MYSQL_DB: circleci_test
         MYSQL_PASSWORD: circleci_test
     steps:
-    - checkout
-    - run: apt-get update && apt-get install wget
-    - install-sudo
-    - setup-timezone
-    - install-dockerize
-    - setup_remote_docker:
-        docker_layer_caching: false
+      - run: apt-get update && apt-get install wget
+      - install-sudo
+      - setup-timezone
+      - install-dockerize
+      - install-mysql
+      - checkout
     - run:
         name: Waiting for Postgres to be ready
         command: dockerize -wait tcp://localhost:3306 -timeout 1m

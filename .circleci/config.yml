@@ -2,8 +2,8 @@ version: 2
 jobs:
   build:
     docker:
-    - image: cimg/go:1.17
-    - image: cimg/postgres:15.3.0
+    - image: cimg/go:1.20.5
+    - image: cimg/postgres:11.20
       environment:
         POSTGRES_USER: circleci-demo-go
         POSTGRES_DB: circle_test
@@ -14,8 +14,8 @@ jobs:
         command: dockerize -wait tcp://localhost:5432 -timeout 1m
   build-docker:
     docker:
-    - image: cimg/go:1.17
-    - image: cimg/postgres:15.3.0
+    - image: cimg/go:1.20.5
+    - image: cimg/postgres:11.20
     steps:
     - checkout
     - run:

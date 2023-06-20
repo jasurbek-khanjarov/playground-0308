@@ -1,15 +1,50 @@
-version: 2.1
-
+version: 2
 jobs:
-  build:
+  build-dockerize:
     docker:
-      - image: node:slim
+    - image: cimg/go:1.20.5
+    - image: cimg/mysql:8.0
+      environment:
+        MYSQL_USER: circleci_test
+        MYSQL_DB: circleci_test
+        MYSQL_PASSWORD: circleci_test
     steps:
-      - checkout
-      - run: echo "Hello World!"
-      
+    - checkout
+    - run:
+        name: Waiting for Postgres to be ready
+        command: dockerize -wait tcp://localhost:3306 -timeout 1m
+    - run:
+        name: Check DB connection
+        command: |
+          export MYSQL_HOST="127.0.0.1"
+          export MYSQL_USER=circleci_test
+          export MYSQL_PASSWORD=circleci_test
+          export MYSQL_DB=circleci_test
+          mysql -h 127.0.0.1 -P 3306 -u ${MYSQL_USER} -p${MYSQL_PASSWORD} -e "show databases;"
+  build-docker:
+    docker:
+    - image: cimg/go:1.20.5
+    - image: cimg/mysql:8.0
+    steps:
+    - checkout
+    - run:
+        name: Docker build Command
+        command: docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:latest
+  build-docker-on-remote:
+    docker:
+    - image: cimg/go:1.20.5
+    - image: cimg/mysql:8.0
+    steps:
+    - setup_remote_docker:
+        docker_layer_caching: false
+    - checkout
+    - run:
+        name: Docker build Command
+        command: docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:latest
 workflows:
-  test_workflow:
+  version: 2
+  build-workflow:
     jobs:
-      - build
-      
+    - build-dockerize
+    - build-docker
+    - build-docker-on-remote

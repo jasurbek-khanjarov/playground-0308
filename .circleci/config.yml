@@ -12,7 +12,7 @@ jobs:
     - checkout
     - run:
         name: Waiting for Postgres to be ready
-        command: dockerize -wait tcp://localhost:5432 -timeout 1m
+        command: dockerize -wait tcp://localhost:3306 -timeout 1m
     - run:
         name: Check DB connection
         command: |
@@ -21,7 +21,7 @@ jobs:
           export MYSQL_PASSWORD=circleci_test
           export MYSQL_DB=circleci_test
           mysql -h 127.0.0.1 -P 3306 -u ${MYSQL_USER} -p${MYSQL_PASSWORD} -e "show databases;"
-  build-docker:
+  build-docker-image:
     docker:
     - image: cimg/go:1.20.5
     - image: cimg/mysql:8.0

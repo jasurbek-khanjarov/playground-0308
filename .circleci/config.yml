@@ -1,11 +1,5 @@
 version: 2
-commands:
-  install-mysql:
-    steps:
-      - run:
-          name: "Install mysql client"
-          command: |
-            sudo apt-get -y update && sudo apt-get install -y default-mysql-client tzdata
+
 jobs:
   build-dockerize:
     docker:
@@ -18,11 +12,13 @@ jobs:
     steps:
       - attach_workspace:
           at: /home/circleci/go
-      - install-mysql
+      - run:
+          name: "Install mysql client"
+          command: |
+            sudo apt-get -y update && sudo apt-get install -y default-mysql-client tzdata
       - run:
           name: Waiting for Postgres to be ready
           command: dockerize -wait tcp://localhost:3306 -timeout 1m
-    
       - run:
           name: Check DB connection
           command: |
@@ -42,9 +38,12 @@ jobs:
     steps:
       - attach_workspace:
           at: /home/circleci/go
-      - install-mysql
+      - run:
+          name: "Install mysql client"
+          command: |
+            sudo apt-get -y update && sudo apt-get install -y default-mysql-client tzdata
       - setup_remote_docker:
-        docker_layer_caching: false
+          docker_layer_caching: false
       - run:
           name: Waiting for Postgres to be ready
           command: dockerize -wait tcp://localhost:3306 -timeout 1m

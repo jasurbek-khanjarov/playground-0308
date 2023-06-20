@@ -1,18 +1,5 @@
 version: 2
 commands:
-  install-sudo:
-    steps:
-      - run:
-          name: "Install Sudo"
-          command: |
-            apt-get update
-            apt-get install -y sudo
-  install-wget:
-    steps:
-      - run:
-          name: "Install Wget"
-          command: |
-            sudo apt-get install -y wget
   install-dockerize:
     steps:
       - run:
@@ -43,13 +30,11 @@ jobs:
         MYSQL_DB: circleci_test
         MYSQL_PASSWORD: circleci_test
     steps:
-      - run: apt-get update && apt-get install wget
-      - install-sudo
-      - setup-timezone
       - install-dockerize
+      - install-mysql
       - setup_remote_docker:
           docker_layer_caching: false
-      - install-mysql
+      - setup-timezone
       - checkout
       - run:
           name: Waiting for Postgres to be ready
@@ -72,11 +57,9 @@ jobs:
         MYSQL_DB: circleci_test
         MYSQL_PASSWORD: circleci_test
     steps:
-      - run: apt-get update && apt-get install wget
-      - install-sudo
-      - setup-timezone
       - install-dockerize
       - install-mysql
+      - setup-timezone
       - checkout
       - run:
           name: Waiting for Postgres to be ready

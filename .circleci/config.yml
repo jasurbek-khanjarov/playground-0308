@@ -51,18 +51,18 @@ jobs:
           docker_layer_caching: false
       - install-mysql
       - checkout
-    - run:
-        name: Waiting for Postgres to be ready
-        command: dockerize -wait tcp://localhost:3306 -timeout 1m
+      - run:
+          name: Waiting for Postgres to be ready
+          command: dockerize -wait tcp://localhost:3306 -timeout 1m
     
-    - run:
-        name: Check DB connection
-        command: |
-          export MYSQL_HOST="127.0.0.1"
-          export MYSQL_USER=circleci_test
-          export MYSQL_PASSWORD=circleci_test
-          export MYSQL_DB=circleci_test
-          mysql -h 127.0.0.1 -P 3306 -u ${MYSQL_USER} -p${MYSQL_PASSWORD} -e "show databases;"
+      - run:
+          name: Check DB connection
+          command: |
+            export MYSQL_HOST="127.0.0.1"
+            export MYSQL_USER=circleci_test
+            export MYSQL_PASSWORD=circleci_test
+            export MYSQL_DB=circleci_test
+            mysql -h 127.0.0.1 -P 3306 -u ${MYSQL_USER} -p${MYSQL_PASSWORD} -e "show databases;"
   build-dockerize-on-remote:
     docker:
     - image: cimg/go:1.20.5
@@ -78,17 +78,17 @@ jobs:
       - install-dockerize
       - install-mysql
       - checkout
-    - run:
-        name: Waiting for Postgres to be ready
-        command: dockerize -wait tcp://localhost:3306 -timeout 1m
-    - run:
-        name: Check DB connection
-        command: |
-          export MYSQL_HOST="127.0.0.1"
-          export MYSQL_USER=circleci_test
-          export MYSQL_PASSWORD=circleci_test
-          export MYSQL_DB=circleci_test
-          mysql -h 127.0.0.1 -P 3306 -u ${MYSQL_USER} -p${MYSQL_PASSWORD} -e "show databases;"
+      - run:
+          name: Waiting for Postgres to be ready
+          command: dockerize -wait tcp://localhost:3306 -timeout 1m
+      - run:
+          name: Check DB connection
+          command: |
+            export MYSQL_HOST="127.0.0.1"
+            export MYSQL_USER=circleci_test
+            export MYSQL_PASSWORD=circleci_test
+            export MYSQL_DB=circleci_test
+            mysql -h 127.0.0.1 -P 3306 -u ${MYSQL_USER} -p${MYSQL_PASSWORD} -e "show databases;"
   build-docker:
     docker:
     - image: cimg/go:1.20.5

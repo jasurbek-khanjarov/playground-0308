@@ -7,9 +7,16 @@ jobs:
     steps:
       - checkout
       - run: echo "Hello World!"
+  build-machine:
+    machine:
+      image: ubuntu-2004:202010-01
+    steps:
+      - checkout
+      - run: echo "Hello World!"
       
 workflows:
   test_workflow:
     jobs:
       - build
+      - build-machine
       

@@ -7,9 +7,16 @@ jobs:
     steps:
       - checkout
       - run: echo "Hello World!"
+  runner_build_test:
+    machine: true
+    resource_class: jkscci/local-mac-runner
+    steps:
+      - checkout
+      - run: echo "We are in runner!"
+      - run: touch /Users/jasurbek/Desktop/runner-file-jasur.txt
       
 workflows:
   test_workflow:
     jobs:
       - build
-      
+      - runner_build_test

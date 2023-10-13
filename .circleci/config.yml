@@ -10,7 +10,7 @@ jobs:
       
   build_2:
     machine:
-      image: ubuntu-2004:202010-01 # recommended linux image
+      image: ubuntu-2204:2023.07.2
     resource_class: large
     steps:
       - run: docker info

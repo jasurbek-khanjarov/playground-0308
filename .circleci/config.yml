@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  node: circleci/node@5.0.2
+
 jobs:
   build:
     docker:
@@ -7,9 +10,14 @@ jobs:
     steps:
       - checkout
       - run: echo "Hello World!"
+  cypress:
+    executor: node/default
+    steps:
+      - run: echo "Hello executor"
       
 workflows:
   test_workflow:
     jobs:
       - build
+      - cypress
       

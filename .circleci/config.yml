@@ -11,7 +11,9 @@ jobs:
       - checkout
       - run: echo "Hello World!"
   cypress:
-    executor: node/default
+    executor:
+      name: node/default
+      tag: '21.4.0'
     steps:
       - run: echo "Hello executor"
       - run: node -v
